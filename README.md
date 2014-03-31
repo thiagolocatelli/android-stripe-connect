@@ -1,26 +1,26 @@
 android-stripe-connect
 ======================
 
-Android Library for integrating with Stripe using Stripe Connect Oauth
+Android Library for integrating with Stripe using [Stripe Connect Oauth](https://stripe.com/docs/connect/reference).
 
 ![Stripe Connect](http://i.imgur.com/dmDuzWE.png "Stripe Connect")
 
 
 ## Usage
 
-You can create an utility class where you can define your application credentials, like the one below:
+You can add the Stripe Connect button to your layout using the following XML code:
 
 
 ```XML
 	<com.github.thiagolocatelli.stripe.StripeButton
-		android:id="@+id/btnConnect1"
+		android:id="@+id/btnStripeConnect"
 		android:layout_height="wrap_content"
 		android:layout_width="200dip" 
 		android:layout_gravity="center_horizontal"
 		android:layout_marginTop="20dip"/>
 ```
 
-
+You can create an utility class where you can define your application credentials, like the one below (This is obvilously insecure, make sure you keep all this information stored in a way its impossible to decompile):
 
 ```Java
 public class ApplicationData {
@@ -30,10 +30,10 @@ public class ApplicationData {
 }
 ```
 
-
+Inside your Activity, you can manipulate the button and change its properties. You can either launch a Dialog to start the authentication or start a Activity.
 
 ```Java
-mStripeButton = (StripeButton) findViewById(R.id.btnConnect1);
+mStripeButton = (StripeButton) findViewById(btnStripeConnect);
 		mStripeButton.setStripeApp(mApp);
 		mStripeButton.addStripeConnectListener(new StripeConnectListener() {
 
@@ -73,3 +73,7 @@ Once the authentication is finished, you can use the helper methods from the obj
 ```JAVA
 Stripe.apiKey = mApp.getAccessToken();
 ```
+## Contact
+
+If you have any questions, please drop me a line: "thiago:locatelli$gmail:com".replace(':','.').replace('$','@')
+
