@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	
+    <ImageView 
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:src="@drawable/outline"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginTop="50dip"/>
+		 
+	 <TextView
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content" 
+		android:text="connect using dialog"
+		android:layout_marginTop="50dp"
+		android:layout_gravity="center_horizontal"/>	
+	 
+	<com.github.thiagolocatelli.stripe.StripeButton
+		android:id="@+id/btnConnect1"
+		android:layout_height="wrap_content"
+		android:layout_width="200dip" 
+		android:layout_gravity="center_horizontal"
+		android:layout_marginTop="20dip"/>
+	
+	 <TextView
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content" 
+		android:text="connect using activiry"
+		android:layout_marginTop="60dp"
+		android:layout_gravity="center_horizontal"/>	
+	
+	<com.github.thiagolocatelli.stripe.StripeButton
+		android:id="@+id/btnConnect2"
+		android:layout_height="wrap_content"
+		android:layout_width="200dip" 
+		android:layout_gravity="center_horizontal"
+		android:layout_marginTop="20dip"/>			
+		
+	<TextView
+		android:id="@+id/tvSummary"
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content" 
+		android:text="Not connected"
+		android:gravity="center_horizontal"
+		android:layout_marginLeft="15dip"
+		android:layout_marginBottom="20dip"
+		android:layout_marginTop="50dp"/>		
+					
+</LinearLayout>

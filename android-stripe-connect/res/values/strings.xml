@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="app_name">android-stripe-connect</string>
+    <string name="btnConnectText">Connect with Stripe</string>
+    <string name="btnDisconnectText">Disconnect from Stripe</string>
+    
+    <string name="btnDialogYes">Yes</string>
+    <string name="btnDialogNo">No</string>
+    
+    <string name="dialogDisconnectText">Disconnect from Stripe?</string>
+    
+</resources>
