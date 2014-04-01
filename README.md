@@ -35,6 +35,9 @@ public class ApplicationData {
 Inside your Activity, you can manipulate the button and change its properties. You can either launch a Dialog to start the authentication or start a Activity.
 
 ```Java
+StripeAppmApp = new StripeApp(this, ApplicationData.CLIENT_ID, 
+				ApplicationData.SECRET_KEY, ApplicationData.CALLBACK_URL);
+
 mStripeButton = (StripeButton) findViewById(btnStripeConnect);
 		mStripeButton.setStripeApp(mApp);
 		mStripeButton.addStripeConnectListener(new StripeConnectListener() {
