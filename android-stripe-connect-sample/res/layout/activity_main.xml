@@ -21,7 +21,7 @@
 	<com.github.thiagolocatelli.stripe.StripeButton
 		android:id="@+id/btnConnect1"
 		android:layout_height="wrap_content"
-		android:layout_width="200dip" 
+		android:layout_width="220dip" 
 		android:layout_gravity="center_horizontal"
 		android:layout_marginTop="20dip"/>
 	
@@ -35,7 +35,7 @@
 	<com.github.thiagolocatelli.stripe.StripeButton
 		android:id="@+id/btnConnect2"
 		android:layout_height="wrap_content"
-		android:layout_width="200dip" 
+		android:layout_width="220dip" 
 		android:layout_gravity="center_horizontal"
 		android:layout_marginTop="20dip"/>			
 		

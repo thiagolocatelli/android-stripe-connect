@@ -106,7 +106,8 @@ public class StripeButton extends Button {
 						i.putExtra("callbackUrl", mStripeApp.getCallbackUrl());
 						i.putExtra("tokenUrl", mStripeApp.getTokenUrl());
 						i.putExtra("secretKey", mStripeApp.getSecretKey());
-						parent.startActivityForResult(i, 1);
+						i.putExtra("accountName", mStripeApp.getAccountName());
+						parent.startActivityForResult(i, StripeApp.STRIPE_CONNECT_REQUEST_CODE);
 					}
 				}
 				

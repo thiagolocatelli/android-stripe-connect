@@ -25,6 +25,7 @@ public class StripeApp {
 	
 	public static enum CONNECT_MODE { DIALOG, ACTIVITY }
 	
+	public static final int STRIPE_CONNECT_REQUEST_CODE = 1;
 	public static final int RESULT_CONNECTED = 1;
 	public static final int RESULT_ERROR = 2;
 	
@@ -36,6 +37,7 @@ public class StripeApp {
 	private String mCallbackUrl;
 	private String mAuthUrl;
 	private String mSecretKey;
+	private String mAccountName;
 
 	private static int SUCCESS = 0;
 	private static int ERROR = 1;
@@ -46,8 +48,9 @@ public class StripeApp {
 
 	private static final String TAG = "StripeApp";
 
-	public StripeApp(Context context, String clientId, String clientKey, String callbackUrl) {
-		mSession = new StripeSession(context);
+	public StripeApp(Context context, String accountName, String clientId, String clientKey, String callbackUrl) {
+		mSession = new StripeSession(context, accountName);
+		mAccountName = accountName;
 		mSecretKey = clientKey;
 		mCallbackUrl = callbackUrl;
 		mAuthUrl = AUTH_URL + "client_id=" + clientId + "&redirect_uri="
@@ -191,12 +194,12 @@ public class StripeApp {
 		return mSession.getAccessToken();
 	}
 	
-	public String getLockCode() {
-		return mSession.getLockCode();
-	}
-
 	public StripeSession getStripeSession() {
 		return mSession;
+	}
+	
+	public String getAccountName() {
+		return mAccountName;
 	}
 	
 	protected String getAuthUrl() {

@@ -12,6 +12,7 @@ import com.github.thiagolocatelli.stripe.StripeApp;
 import com.github.thiagolocatelli.stripe.StripeApp.CONNECT_MODE;
 import com.github.thiagolocatelli.stripe.StripeButton;
 import com.github.thiagolocatelli.stripe.StripeConnectListener;
+import com.stripe.Stripe;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -24,7 +25,7 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		mApp = new StripeApp(this, ApplicationData.CLIENT_ID, 
+		mApp = new StripeApp(this, "StripeAccount", ApplicationData.CLIENT_ID, 
 				ApplicationData.SECRET_KEY, ApplicationData.CALLBACK_URL);
 
 		tvSummary = (TextView) findViewById(R.id.tvSummary);
@@ -53,11 +54,13 @@ public class MainActivity extends ActionBarActivity {
 			
 		});
 
-		mApp2 = new StripeApp(this, ApplicationData.CLIENT_ID, 
+		mApp2 = new StripeApp(this, "StripeAccount", ApplicationData.CLIENT_ID, 
 				ApplicationData.SECRET_KEY, ApplicationData.CALLBACK_URL);
 		mStripeButton2 = (StripeButton) findViewById(R.id.btnConnect2);
 		mStripeButton2.setStripeApp(mApp2);
 		mStripeButton2.setConnectMode(CONNECT_MODE.ACTIVITY);
+		
+		Stripe.apiKey = mApp.getAccessToken();
 		
 	}
 

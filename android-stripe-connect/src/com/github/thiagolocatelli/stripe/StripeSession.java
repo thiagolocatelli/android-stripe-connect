@@ -3,6 +3,7 @@ package com.github.thiagolocatelli.stripe;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.Context;
+import android.util.Log;
 
 /**
  *
@@ -14,18 +15,17 @@ public class StripeSession {
 	private SharedPreferences sharedPref;
 	private Editor editor;
 
-	private static final String SHARED = "StripeConnect_Preferences";
+	private static final String SHARED = "_StripeAccount_Preferences";
 	private static final String API_ACCESS_TOKEN = "access_token";
 	private static final String API_REFRESH_TOKEN = "refresh_token";
 	private static final String API_TOKEN_TYPE = "token_type";
 	private static final String API_USER_ID = "user_id";
 	private static final String API_PUBLISHABLE_KEY = "publishable_key";
 	private static final String API_LIVE_MODE = "live_mode";
-	
-	private static final String APP_LOCK_CODE = "lock_code";
 
-	public StripeSession(Context context) {
-		sharedPref = context.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
+	public StripeSession(Context context, String accountName) {
+		Log.i("StripeSession", "StripeSession[accountName]:					" + accountName);
+		sharedPref = context.getSharedPreferences(accountName + SHARED, Context.MODE_PRIVATE);
 	}
 
 	public void storeAccessToken(String accessToken) {
@@ -63,12 +63,6 @@ public class StripeSession {
 		editor.putBoolean(API_LIVE_MODE, liveMode);
 		editor.commit();
 	}
-	
-	public void storeLockCode(String lockcode) {
-		editor = sharedPref.edit();
-		editor.putString(APP_LOCK_CODE, lockcode);
-		editor.commit();
-	}
 
 	public String getAccessToken() {
 		return sharedPref.getString(API_ACCESS_TOKEN, null);
@@ -93,10 +87,6 @@ public class StripeSession {
 	public Boolean getLiveMode() {
 		return sharedPref.getBoolean(API_LIVE_MODE, false);
 	}	
-	
-	public String getLockCode() {
-		return sharedPref.getString(APP_LOCK_CODE, null);
-	}
 
 	public void resetAccessToken() {
 		editor = sharedPref.edit();
@@ -106,6 +96,7 @@ public class StripeSession {
 		editor.remove(API_USER_ID);
 		editor.remove(API_TOKEN_TYPE);
 		editor.remove(API_LIVE_MODE);
+		editor.clear();
 		editor.commit();
 	}
 

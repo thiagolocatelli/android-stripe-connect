@@ -31,6 +31,7 @@ public class StripeActivity extends Activity {
 	private String mCallBackUrl;
 	private String mTokenUrl;
 	private String mSecretKey;
+	private String mAccountName;
 	
 	static final FrameLayout.LayoutParams FILL = new FrameLayout.LayoutParams(
 			ViewGroup.LayoutParams.MATCH_PARENT,
@@ -44,6 +45,7 @@ public class StripeActivity extends Activity {
 		mCallBackUrl = getIntent().getStringExtra("callbackUrl");
 		mTokenUrl = getIntent().getStringExtra("tokenUrl");
 		mSecretKey = getIntent().getStringExtra("secretKey");
+		mAccountName = getIntent().getStringExtra("accountName");
 		
 		setUpWebView();
 		
@@ -144,6 +146,7 @@ public class StripeActivity extends Activity {
 			Log.i(TAG, "Opening URL " + url.toString() + "?" + urlParameters);
 			
 			String response = StripeUtils.executePost(mTokenUrl, urlParameters);
+			Log.i(TAG, "response: " + response);
 			JSONObject obj = new JSONObject(response);
 			
 			Log.i(TAG, "String data[access_token]:			" + obj.getString("access_token"));
@@ -154,7 +157,7 @@ public class StripeActivity extends Activity {
 			Log.i(TAG, "String data[stripe_user_id]:		" + obj.getString("stripe_user_id"));
 			Log.i(TAG, "String data[scope]:					" + obj.getString("scope"));
 			
-			StripeSession mSession = new StripeSession(this);
+			StripeSession mSession = new StripeSession(this, mAccountName);
 			mSession.storeAccessToken(obj.getString("access_token"));
 			mSession.storeRefreshToken(obj.getString("refresh_token"));
 			mSession.storePublishableKey(obj.getString("stripe_publishable_key"));
@@ -164,6 +167,7 @@ public class StripeActivity extends Activity {
 			
 		} 
 		catch (Exception e) {
+			e.printStackTrace();
 			Map<String, String> query_pairs = new LinkedHashMap<String, String>();
 	    	query_pairs.put("error", "UnsupportedEncodingException");
 	    	query_pairs.put("error_description", e.getMessage());	 
