@@ -3,8 +3,10 @@ android-stripe-connect
 
 Android Library for integrating with Stripe using [Stripe Connect Oauth](https://stripe.com/docs/connect/reference).
 
+<center>
 ![Stripe Connect](http://i.imgur.com/vnoicS1.png "Stripe Connect")
 ![Stripe Connect](http://i.imgur.com/oyW4Phj.png "Stripe Connect")
+</center>
 
 ## Usage
 
