@@ -38,7 +38,7 @@ Inside your Activity, you can manipulate the button and change its properties. Y
 StripeAppmApp = new StripeApp(this, ApplicationData.CLIENT_ID, 
 				ApplicationData.SECRET_KEY, ApplicationData.CALLBACK_URL);
 
-mStripeButton = (StripeButton) findViewById(btnStripeConnect);
+mStripeButton = (StripeButton) findViewById(R.id.btnStripeConnect);
 		mStripeButton.setStripeApp(mApp);
 		mStripeButton.addStripeConnectListener(new StripeConnectListener() {
 
@@ -63,8 +63,8 @@ mStripeButton = (StripeButton) findViewById(btnStripeConnect);
 By default, when the Stripe Connect button is clicked, an Android Dialog will open and display the Stripe authentication page. If you would like to open an Activity instead of a Dialog, you can use **setConnectMode** to change such behavior.
 
 ```Java
-mStripeButton2 = (StripeButton) findViewById(R.id.btnConnect2);
-mStripeButton2.setStripeApp(mApp2);
+mStripeButton2 = (StripeButton) findViewById(R.id.btnStripeConnect);
+mStripeButton2.setStripeApp(mApp);
 mStripeButton2.setConnectMode(CONNECT_MODE.ACTIVITY);
 ```
 You also need to add to your AndroidManifest.xml the following line, which will allow the Stripe Connect button to start the authentication Activity.
