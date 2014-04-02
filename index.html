@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Android-stripe-connect by thiagolocatelli</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Android-stripe-connect</h1>
+        <h2>Android Library for integrating Stripe using Stripe Connect Oauth</h2>
+        <a href="https://github.com/thiagolocatelli/android-stripe-connect" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="android-stripe-connect" class="anchor" href="#android-stripe-connect"><span class="octicon octicon-link"></span></a>android-stripe-connect</h1>
+
+<p>Android Library for integrating with Stripe using <a href="https://stripe.com/docs/connect/reference">Stripe Connect Oauth</a>.</p>
+
+<p></p>
+<img src="http://i.imgur.com/vnoicS1.png" alt="Stripe Connect" title="Stripe Connect"><img src="http://i.imgur.com/oyW4Phj.png" alt="Stripe Connect" title="Stripe Connect">
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>You can add the Stripe Connect button to your layout using the following XML code:</p>
+
+<div class="highlight highlight-XML"><pre>    <span class="nt">&lt;com.github.thiagolocatelli.stripe.StripeButton</span>
+        <span class="na">android:id=</span><span class="s">"@+id/btnStripeConnect"</span>
+        <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>
+        <span class="na">android:layout_width=</span><span class="s">"200dip"</span> 
+        <span class="na">android:layout_gravity=</span><span class="s">"center_horizontal"</span>
+        <span class="na">android:layout_marginTop=</span><span class="s">"20dip"</span><span class="nt">/&gt;</span>
+</pre></div>
+
+<p>You can create an utility class where you can define your application credentials, like the one below (This is obvilously insecure, make sure you keep all this information stored in a way its impossible to decompile):</p>
+
+<div class="highlight highlight-Java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ApplicationData</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">CLIENT_ID</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">CLIENT_SECRET</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">CALLBACK_URL</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>Inside your Activity, you can manipulate the button and change its properties. You can either launch a Dialog to start the authentication or start a Activity.</p>
+
+<div class="highlight highlight-Java"><pre><span class="n">StripeAppmApp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StripeApp</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">ApplicationData</span><span class="o">.</span><span class="na">CLIENT_ID</span><span class="o">,</span> 
+                <span class="n">ApplicationData</span><span class="o">.</span><span class="na">SECRET_KEY</span><span class="o">,</span> <span class="n">ApplicationData</span><span class="o">.</span><span class="na">CALLBACK_URL</span><span class="o">);</span>
+
+<span class="n">mStripeButton</span> <span class="o">=</span> <span class="o">(</span><span class="n">StripeButton</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">btnStripeConnect</span><span class="o">);</span>
+        <span class="n">mStripeButton</span><span class="o">.</span><span class="na">setStripeApp</span><span class="o">(</span><span class="n">mApp</span><span class="o">);</span>
+        <span class="n">mStripeButton</span><span class="o">.</span><span class="na">addStripeConnectListener</span><span class="o">(</span><span class="k">new</span> <span class="n">StripeConnectListener</span><span class="o">()</span> <span class="o">{</span>
+
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onConnected</span><span class="o">()</span> <span class="o">{</span>
+                <span class="n">tvSummary</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="s">"Connected as "</span> <span class="o">+</span> <span class="n">mApp</span><span class="o">.</span><span class="na">getAccessToken</span><span class="o">());</span>
+            <span class="o">}</span>
+
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onDisconnected</span><span class="o">()</span> <span class="o">{</span>
+                <span class="n">tvSummary</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="s">"Disconnected"</span><span class="o">);</span>
+            <span class="o">}</span>
+
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">String</span> <span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">MainActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span> <span class="n">error</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
+            <span class="o">}</span>
+
+        <span class="o">});</span>
+</pre></div>
+
+<p>By default, when the Stripe Connect button is clicked, an Android Dialog will open and display the Stripe authentication page. If you would like to open an Activity instead of a Dialog, you can use <strong>setConnectMode</strong> to change such behavior.</p>
+
+<div class="highlight highlight-Java"><pre><span class="n">mStripeButton</span> <span class="o">=</span> <span class="o">(</span><span class="n">StripeButton</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">btnStripeConnect</span><span class="o">);</span>
+<span class="n">mStripeButton</span><span class="o">.</span><span class="na">setStripeApp</span><span class="o">(</span><span class="n">mApp</span><span class="o">);</span>
+<span class="n">mStripeButton</span><span class="o">.</span><span class="na">setConnectMode</span><span class="o">(</span><span class="n">CONNECT_MODE</span><span class="o">.</span><span class="na">ACTIVITY</span><span class="o">);</span>
+</pre></div>
+
+<p>You also need to add to your AndroidManifest.xml the following line, which will allow the Stripe Connect button to start the authentication Activity.</p>
+
+<div class="highlight highlight-XML"><pre><span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">"com.github.thiagolocatelli.stripe.StripeActivity"</span>  <span class="nt">/&gt;</span>
+</pre></div>
+
+<p>Once the authentication is finished, you can use the helper methods from the object StripeApp to get the data you need, like the oauth access token required to make calls using the <a href="https://github.com/stripe/stripe-java">Stripe Java library</a>.</p>
+
+<div class="highlight highlight-JAVA"><pre><span class="n">Stripe</span><span class="o">.</span><span class="na">apiKey</span> <span class="o">=</span> <span class="n">mApp</span><span class="o">.</span><span class="na">getAccessToken</span><span class="o">();</span>
+</pre></div>
+
+<p>Download the sample application and git it a try.</p>
+
+<h2>
+<a name="contact" class="anchor" href="#contact"><span class="octicon octicon-link"></span></a>Contact</h2>
+
+<p>If you have any questions, please drop me a line: "thiago:locatelli$gmail:com".replace(':','.').replace('$','@')</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/thiagolocatelli/android-stripe-connect/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/thiagolocatelli/android-stripe-connect/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/thiagolocatelli/android-stripe-connect"></a> is maintained by <a href="https://github.com/thiagolocatelli">thiagolocatelli</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
