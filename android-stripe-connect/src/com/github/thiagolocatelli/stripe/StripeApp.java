@@ -10,8 +10,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
-
 import com.github.thiagolocatelli.stripe.StripeDialog.OAuthDialogListener;
 import com.stripe.Stripe;
 import com.stripe.model.Account;
@@ -45,16 +43,20 @@ public class StripeApp {
 	private static int PHASE2 = 2;
 	private static final String AUTH_URL = "https://connect.stripe.com/oauth/authorize?";
 	private static final String TOKEN_URL = "https://connect.stripe.com/oauth/token";
-
+	private static final String SCOPE = "read_only";
+	
 	private static final String TAG = "StripeApp";
-
-	public StripeApp(Context context, String accountName, String clientId, String clientKey, String callbackUrl) {
+	
+	public StripeApp(Context context, String accountName, String clientId, String clientKey, String callbackUrl, String scope) {
 		mSession = new StripeSession(context, accountName);
 		mAccountName = accountName;
 		mSecretKey = clientKey;
 		mCallbackUrl = callbackUrl;
-		mAuthUrl = AUTH_URL + "client_id=" + clientId + "&redirect_uri="
-				+ mCallbackUrl + "&scope=read_write&response_type=code&stripe_landing=login";
+		mAuthUrl = AUTH_URL + "client_id=" + clientId
+				+ "&scope=" + ((scope == null) ? SCOPE : scope)  
+				+ "&response_type=code"
+				+ "&stripe_landing=login" 
+				+ "&redirect_uri="+ mCallbackUrl ;
 
 		OAuthDialogListener listener = new OAuthDialogListener() {
 			@Override
@@ -70,7 +72,11 @@ public class StripeApp {
 
 		mDialog = new StripeDialog(context, mAuthUrl, mCallbackUrl, listener);
 		mProgress = new ProgressDialog(context);
-		mProgress.setCancelable(false);
+		mProgress.setCancelable(false);		
+	}
+
+	public StripeApp(Context context, String accountName, String clientId, String clientKey, String callbackUrl) {
+		this(context, accountName, clientId, clientKey, callbackUrl, null);
 	}
 
 	private void getAccessToken(final String code) {
@@ -88,19 +94,19 @@ public class StripeApp {
 					String urlParameters = "code=" + code 
 							+ "&client_secret=" + mSecretKey
 							+ "&grant_type=authorization_code"; 
-					Log.i(TAG, "Getting access token with code:" + code);
-					Log.i(TAG, "Opening URL " + url.toString() + "?" + urlParameters);
+					AppLog.i(TAG, "getAccessToken", "Getting access token with code:" + code);
+					AppLog.i(TAG, "getAccessToken", "Opening URL " + url.toString() + "?" + urlParameters);
 					
 					String response = StripeUtils.executePost(TOKEN_URL, urlParameters);
 					JSONObject obj = new JSONObject(response);
 					
-					Log.i(TAG, "String data[access_token]:			" + obj.getString("access_token"));
-					Log.i(TAG, "String data[livemode]:				" + obj.getBoolean("livemode"));
-					Log.i(TAG, "String data[refresh_token]:			" + obj.getString("refresh_token"));
-					Log.i(TAG, "String data[token_type]:			" + obj.getString("token_type"));
-					Log.i(TAG, "String data[stripe_publishable_key]: " + obj.getString("stripe_publishable_key"));
-					Log.i(TAG, "String data[stripe_user_id]:		" + obj.getString("stripe_user_id"));
-					Log.i(TAG, "String data[scope]:					" + obj.getString("scope"));
+					AppLog.i(TAG, "getAccessToken", "String data[access_token]:			" + obj.getString("access_token"));
+					AppLog.i(TAG, "getAccessToken", "String data[livemode]:				" + obj.getBoolean("livemode"));
+					AppLog.i(TAG, "getAccessToken", "String data[refresh_token]:			" + obj.getString("refresh_token"));
+					AppLog.i(TAG, "getAccessToken", "String data[token_type]:			" + obj.getString("token_type"));
+					AppLog.i(TAG, "getAccessToken", "String data[stripe_publishable_key]: " + obj.getString("stripe_publishable_key"));
+					AppLog.i(TAG, "getAccessToken", "String data[stripe_user_id]:		" + obj.getString("stripe_user_id"));
+					AppLog.i(TAG, "getAccessToken", "String data[scope]:					" + obj.getString("scope"));
 					
 					mSession.storeAccessToken(obj.getString("access_token"));
 					mSession.storeRefreshToken(obj.getString("refresh_token"));
@@ -126,7 +132,7 @@ public class StripeApp {
 		new Thread() {
 			@Override
 			public void run() {
-				Log.i(TAG, "Fetching user info");
+				AppLog.i(TAG, "getAccountData", "Fetching user info");
 				int what = SUCCESS;
 
 				try {
@@ -160,7 +166,7 @@ public class StripeApp {
 					mListener.onFail("Failed to get access token");
 				}
 			} else {
-				Log.i(TAG, "Calling mListener.onSuccess()");
+				AppLog.i(TAG, "mHandler.handleMessage", "Calling mListener.onSuccess()");
 				mProgress.dismiss();
 				mListener.onSuccess();
 			}

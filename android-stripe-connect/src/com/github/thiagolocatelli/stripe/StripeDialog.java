@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -106,12 +105,12 @@ public class StripeDialog extends Dialog {
 
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			Log.d(TAG, "Redirecting URL " + url);
+			AppLog.d(TAG, "OAuthWebViewClient.shouldOverrideUrlLoading", "Redirecting URL " + url);
 
 			if (url.startsWith(mCallbackUrl)) {
 				
 				String queryString = url.replace(mCallbackUrl + "/?", "");
-				Log.d(TAG, "queryString:" + queryString);
+				AppLog.d(TAG, "OAuthWebViewClient.shouldOverrideUrlLoading", "queryString:" + queryString);
 				Map<String, String> parameters = StripeUtils.splitQuery(queryString);
 				if(!url.contains("error")) {
 					mListener.onComplete(parameters);
@@ -128,7 +127,7 @@ public class StripeDialog extends Dialog {
 		@Override
 		public void onReceivedError(WebView view, int errorCode,
 				String description, String failingUrl) {
-			Log.d(TAG, "Page error: " + description);
+			AppLog.e(TAG, "OAuthWebViewClient.onReceivedError", "Page error[errorCode="+errorCode+"]: " + description);
 
 			super.onReceivedError(view, errorCode, description, failingUrl);
 			Map<String, String> error = new LinkedHashMap<String, String>();
@@ -141,12 +140,14 @@ public class StripeDialog extends Dialog {
 		@Override
 		public void onPageStarted(WebView view, String url, Bitmap favicon) {
 			super.onPageStarted(view, url, favicon);
+			AppLog.d(TAG, "OAuthWebViewClient.onPageStarted", "url: " + url);
 			mSpinner.show();
 		}
 
 		@Override
 		public void onPageFinished(WebView view, String url) {
 			super.onPageFinished(view, url);
+			AppLog.d(TAG, "OAuthWebViewClient.onPageFinished", "url: " + url);
 			mSpinner.dismiss();
 			String title = mWebView.getTitle();
 			if (title != null && title.length() > 0) {

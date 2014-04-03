@@ -32,7 +32,7 @@ public class ApplicationData {
 }
 ```
 
-Inside your Activity, you can manipulate the button and change its properties. You can either launch a Dialog to start the authentication or start a Activity.
+Inside your Activity, you can manipulate the button and change its properties. You can either launch a Dialog to start the authentication or start a Activity. By default, the scope is **read_only**, if you want to give write permissions, you gotta use StripeApp object and pass "read_write" as scope.
 
 ```Java
 StripeAppmApp = new StripeApp(this, ApplicationData.CLIENT_ID, 

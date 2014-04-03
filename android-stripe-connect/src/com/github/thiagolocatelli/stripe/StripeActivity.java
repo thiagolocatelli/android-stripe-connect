@@ -12,7 +12,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.webkit.WebView;
@@ -91,12 +90,11 @@ public class StripeActivity extends Activity {
 
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			Log.d(TAG, "Redirecting URL " + url);
-
+			AppLog.d(TAG, "OAuthWebViewClient.shouldOverrideUrlLoading", "Redirecting URL " + url);
 			if (url.startsWith(mCallBackUrl)) {
 				
 				String queryString = url.replace(mCallBackUrl + "/?", "");
-				Log.d(TAG, "queryString:" + queryString);
+				AppLog.d(TAG, "OAuthWebViewClient.shouldOverrideUrlLoading", "queryString:" + queryString);
 				Map<String, String> parameters = StripeUtils.splitQuery(queryString);
 				if(!url.contains("error")) {
 					onComplete(parameters);
@@ -112,7 +110,7 @@ public class StripeActivity extends Activity {
 		@Override
 		public void onReceivedError(WebView view, int errorCode,
 				String description, String failingUrl) {
-			Log.d(TAG, "Page error: " + description);
+			AppLog.e(TAG, "OAuthWebViewClient.onReceivedError", "Page error[errorCode="+errorCode+"]: " + description);
 
 			super.onReceivedError(view, errorCode, description, failingUrl);
 			Map<String, String> error = new LinkedHashMap<String, String>();
@@ -124,12 +122,14 @@ public class StripeActivity extends Activity {
 		@Override
 		public void onPageStarted(WebView view, String url, Bitmap favicon) {
 			super.onPageStarted(view, url, favicon);
+			AppLog.d(TAG, "OAuthWebViewClient.onPageStarted", "url: " + url);
 			mSpinner.show();
 		}
 
 		@Override
 		public void onPageFinished(WebView view, String url) {
 			super.onPageFinished(view, url);
+			AppLog.d(TAG, "OAuthWebViewClient.onPageFinished", "url: " + url);
 			mSpinner.dismiss();
 		}
 
@@ -142,20 +142,20 @@ public class StripeActivity extends Activity {
 			String urlParameters = "code=" + code 
 					+ "&client_secret=" + mSecretKey
 					+ "&grant_type=authorization_code"; 
-			Log.i(TAG, "Getting access token with code:" + code);
-			Log.i(TAG, "Opening URL " + url.toString() + "?" + urlParameters);
+			AppLog.i(TAG, "getAccessToken", "Getting access token with code:" + code);
+			AppLog.i(TAG, "getAccessToken", "Opening URL " + url.toString() + "?" + urlParameters);
 			
 			String response = StripeUtils.executePost(mTokenUrl, urlParameters);
-			Log.i(TAG, "response: " + response);
+			AppLog.i(TAG, "getAccessToken", "response: " + response);
 			JSONObject obj = new JSONObject(response);
 			
-			Log.i(TAG, "String data[access_token]:			" + obj.getString("access_token"));
-			Log.i(TAG, "String data[livemode]:				" + obj.getBoolean("livemode"));
-			Log.i(TAG, "String data[refresh_token]:			" + obj.getString("refresh_token"));
-			Log.i(TAG, "String data[token_type]:			" + obj.getString("token_type"));
-			Log.i(TAG, "String data[stripe_publishable_key]: " + obj.getString("stripe_publishable_key"));
-			Log.i(TAG, "String data[stripe_user_id]:		" + obj.getString("stripe_user_id"));
-			Log.i(TAG, "String data[scope]:					" + obj.getString("scope"));
+			AppLog.i(TAG, "getAccessToken", "String data[access_token]:			" + obj.getString("access_token"));
+			AppLog.i(TAG, "getAccessToken", "String data[livemode]:				" + obj.getBoolean("livemode"));
+			AppLog.i(TAG, "getAccessToken", "String data[refresh_token]:			" + obj.getString("refresh_token"));
+			AppLog.i(TAG, "getAccessToken", "String data[token_type]:			" + obj.getString("token_type"));
+			AppLog.i(TAG, "getAccessToken", "String data[stripe_publishable_key]: " + obj.getString("stripe_publishable_key"));
+			AppLog.i(TAG, "getAccessToken", "String data[stripe_user_id]:		" + obj.getString("stripe_user_id"));
+			AppLog.i(TAG, "getAccessToken", "String data[scope]:					" + obj.getString("scope"));
 			
 			StripeSession mSession = new StripeSession(this, mAccountName);
 			mSession.storeAccessToken(obj.getString("access_token"));

@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.thiagolocatelli.stripe.sample.R;
 import com.github.thiagolocatelli.stripe.StripeApp;
 import com.github.thiagolocatelli.stripe.StripeApp.CONNECT_MODE;
 import com.github.thiagolocatelli.stripe.StripeButton;
