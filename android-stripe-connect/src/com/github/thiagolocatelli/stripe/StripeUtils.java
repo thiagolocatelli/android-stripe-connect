@@ -60,9 +60,9 @@ public class StripeUtils {
 		wr.writeBytes(parameters);
 		wr.flush();
 		wr.close();
-		connection.disconnect();
 		
 		String response = streamToString(connection.getInputStream());	
+		connection.disconnect();
 		return response;
 		
 	}

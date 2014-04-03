@@ -54,7 +54,7 @@ public class StripeButton extends Button {
 		setClickable(true);
 		setBackgroundResource(R.drawable.button_stripe_connect);
 		Drawable img = getContext().getResources().getDrawable(R.drawable.button_stripe_icon);
-		img.setBounds( 0, 0, 60, 60 );
+		img.setBounds( 0, 0, 50, 50 );
 		setCompoundDrawables(img, null, null, null);
 		
 		setTextColor(getResources().getColor(android.R.color.white));
