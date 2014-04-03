@@ -58,7 +58,7 @@
 <span class="o">}</span>
 </pre></div>
 
-<p>Inside your Activity, you can manipulate the button and change its properties. You can either launch a Dialog to start the authentication or start a Activity.</p>
+<p>Inside your Activity, you can manipulate the button and change its properties. You can either launch a Dialog to start the authentication or start a Activity. By default, the scope is <strong>read_only</strong>, if you want to give write permissions, you gotta use StripeApp object and pass "read_write" as scope.</p>
 
 <div class="highlight highlight-Java"><pre><span class="n">StripeAppmApp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StripeApp</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">ApplicationData</span><span class="o">.</span><span class="na">CLIENT_ID</span><span class="o">,</span> 
                 <span class="n">ApplicationData</span><span class="o">.</span><span class="na">SECRET_KEY</span><span class="o">,</span> <span class="n">ApplicationData</span><span class="o">.</span><span class="na">CALLBACK_URL</span><span class="o">);</span>
