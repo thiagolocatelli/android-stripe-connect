@@ -9,11 +9,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -28,8 +32,9 @@ import android.widget.TextView;
  */
 public class StripeDialog extends Dialog {
 
-	static final float[] DIMENSIONS_LANDSCAPE = { 460, 260 };
-	static final float[] DIMENSIONS_PORTRAIT = { 280, 420 };
+	static final int[] DIMENSIONS_LANDSCAPE = { 60, 60 };
+	static final int[] DIMENSIONS_PORTRAIT = { 30, 60 };
+	
 	static final FrameLayout.LayoutParams FILL = new FrameLayout.LayoutParams(
 			ViewGroup.LayoutParams.MATCH_PARENT,
 			ViewGroup.LayoutParams.MATCH_PARENT);
@@ -66,14 +71,19 @@ public class StripeDialog extends Dialog {
 		setUpTitle();
 		setUpWebView();
 
-		Display display = getWindow().getWindowManager().getDefaultDisplay();
-		final float scale = getContext().getResources().getDisplayMetrics().density;
-		float[] dimensions = (display.getWidth() < display.getHeight()) ? DIMENSIONS_PORTRAIT
-				: DIMENSIONS_LANDSCAPE;
-
-		addContentView(mContent, new FrameLayout.LayoutParams(
-				(int) (dimensions[0] * scale + 0.5f), (int) (dimensions[1]
-						* scale + 0.5f)));
+		int pixelsWidth = getScreenWidthPixes();
+		int pixelsHeight = getScreenHeightPixes();
+		int dpWidth = pxToDp(pixelsWidth);
+		int dpHeight = pxToDp(pixelsHeight);
+		
+		int[] dimensions = (pixelsWidth < pixelsHeight) ? DIMENSIONS_PORTRAIT
+						: DIMENSIONS_LANDSCAPE;
+		
+		int dpNewWidth = dpWidth - dimensions[0];
+		int dpNewHeight = dpHeight - dimensions[1];
+		int pixelsNewWidth = dpToPx(dpNewWidth);
+		int pixelsNewHeight = dpToPx(dpNewHeight);
+		addContentView(mContent, new FrameLayout.LayoutParams(pixelsNewWidth, pixelsNewHeight));
 		
 		StripeUtils.removeAllCookies(getContext());
 	}
@@ -160,6 +170,50 @@ public class StripeDialog extends Dialog {
 	public interface OAuthDialogListener {
 		public abstract void onComplete(Map<String, String> parameters);
 		public abstract void onError(Map<String, String> parameters);
+	}
+	
+	@SuppressLint("InlinedApi")
+	public int dpToPx(int dp) {
+	    DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+	    int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));       
+	    return px;
+	}
+
+	@SuppressLint("InlinedApi")
+	public int pxToDp(int px) {
+	    DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+	    int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+	    return dp;
+	}
+	
+	@SuppressWarnings("deprecation")
+	@SuppressLint("NewApi")
+	private int getScreenWidthPixes() {
+		Point size = new Point();
+		WindowManager w = getWindow().getWindowManager();
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+		    w.getDefaultDisplay().getSize(size);
+		    return size.x;
+		}
+		else {
+		    Display d = w.getDefaultDisplay();
+		    return d.getWidth();
+		}		
+	}
+	
+	@SuppressWarnings("deprecation")
+	@SuppressLint("NewApi")
+	private int getScreenHeightPixes() {
+		Point size = new Point();
+		WindowManager w = getWindow().getWindowManager();
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+		    w.getDefaultDisplay().getSize(size);
+		    return size.y;
+		}
+		else {
+		    Display d = w.getDefaultDisplay();
+		    return d.getHeight();
+		}		
 	}
 
 }

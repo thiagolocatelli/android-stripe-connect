@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -54,7 +55,7 @@ public class StripeButton extends Button {
 		setClickable(true);
 		setBackgroundResource(R.drawable.button_stripe_connect);
 		Drawable img = getContext().getResources().getDrawable(R.drawable.button_stripe_icon);
-		img.setBounds( 0, 0, 50, 50 );
+		img.setBounds( 0, 0, dpToPx(32), dpToPx(32) );
 		setCompoundDrawables(img, null, null, null);
 		
 		setTextColor(getResources().getColor(android.R.color.white));
@@ -191,6 +192,18 @@ public class StripeButton extends Button {
 				}
 			}
 		};
+	}
+	
+	public int dpToPx(int dp) {
+	    DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+	    int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));       
+	    return px;
+	}
+
+	public int pxToDp(int px) {
+	    DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+	    int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+	    return dp;
 	}
 
 }
